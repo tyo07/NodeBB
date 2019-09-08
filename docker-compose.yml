@@ -9,8 +9,11 @@ services:
       - "4567:4567"
     volumes:
       - type: bind
-        source: G:/Project/NodeBB/server
-        target: /home/server
+        source: /Users/sactioswastioyono/eclipse-workspace/NodeBB/build
+        target: /usr/src/app/build
+      - type: bind
+        source: /Users/sactioswastioyono/eclipse-workspace/NodeBB/public/uploads
+        target: /usr/src/app/public/uploads
     restart: always
     depends_on:
       - mongodb
@@ -24,8 +27,8 @@ services:
       - "27017:27017"
     volumes:
       - type: bind
-        source: G:/Project/NodeBB_data/db
-        target: /home/server/db 
+        source: /Users/sactioswastioyono/eclipse-workspace/NodeBB_data
+        target: /data/db 
     environment:
       - MONGO_INITDB_ROOT_USERNAME=node
       - MONGO_INITDB_ROOT_PASSWORD=node
