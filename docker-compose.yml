@@ -1,0 +1,35 @@
+version: '3.7'
+services:
+  server:
+    build:
+      context: .
+    expose:
+      - "4567"
+    ports:
+      - "4567:4567"
+    volumes:
+      - type: bind
+        source: G:/Project/NodeBB/server
+        target: /home/server
+    restart: always
+    depends_on:
+      - mongodb
+  mongodb:
+    build:
+      context: ./install/mongodb
+    restart: always
+    expose:
+      - "27017"
+    ports:
+      - "27017:27017"
+    volumes:
+      - type: bind
+        source: G:/Project/NodeBB_data/db
+        target: /home/server/db 
+    environment:
+      - MONGO_INITDB_ROOT_USERNAME=node
+      - MONGO_INITDB_ROOT_PASSWORD=node
+      - MONGO_INITDB_ROOT_DATABASE=admin
+      - MONGO_USERDB_ADMIN_USERNAME=node
+      - MONGO_USERDB_ADMIN_PASSWORD=node
+      - MONGO_USERDB_ADMIN_DATABASE=nodebb
