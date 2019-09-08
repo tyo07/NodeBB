@@ -12,6 +12,9 @@ services:
         source: /Users/sactioswastioyono/eclipse-workspace/NodeBB/build
         target: /usr/src/app/build
       - type: bind
+        source: /Users/sactioswastioyono/eclipse-workspace/NodeBB/node_modules
+        target: /usr/src/app/node_modules
+      - type: bind
         source: /Users/sactioswastioyono/eclipse-workspace/NodeBB/public/uploads
         target: /usr/src/app/public/uploads
     restart: always
