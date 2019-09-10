@@ -2,40 +2,57 @@ version: '3.7'
 services:
   server:
     build:
-      context: .
+      context: ./docker/server
     expose:
       - "4567"
-    ports:
-      - "4567:4567"
     volumes:
       - type: bind
-        source: /Users/sactioswastioyono/eclipse-workspace/NodeBB/build
-        target: /usr/src/app/build
-      - type: bind
-        source: /Users/sactioswastioyono/eclipse-workspace/NodeBB/node_modules
-        target: /usr/src/app/node_modules
-      - type: bind
-        source: /Users/sactioswastioyono/eclipse-workspace/NodeBB/public/uploads
-        target: /usr/src/app/public/uploads
+        source: ./server
+        target: /home/server
     restart: always
     depends_on:
       - mongodb
+      - nginx
+  nginx:
+    build:
+      context: ./docker/nginx
+    restart: always
+    volumes:
+      - type: bind
+        source: ./data/certbot/conf
+        target: /etc/letsencrypt
+      - type: bind
+        source: ./data/certbot/www
+        target: /var/www/certbot
+    ports:
+      - "443:443"
+      - "80:80"
+    command: "/bin/sh -c 'while :; do sleep 6h & wait $${!}; nginx -s reload; done & nginx -g \"daemon off;\"'"
   mongodb:
     build:
-      context: ./install/mongodb
+      context: ./docker/mongodb
     restart: always
     expose:
       - "27017"
-    ports:
-      - "27017:27017"
+    volumes:
+      - type: volume
+        source: mongodb_data
+        target: /data/db
+      - type: volume
+        source: mongodb_config
+        target: /data/configdb
+  certbot:
+    image: certbot/certbot
     volumes:
       - type: bind
-        source: /Users/sactioswastioyono/eclipse-workspace/NodeBB_data
-        target: /data/db 
-    environment:
-      - MONGO_INITDB_ROOT_USERNAME=node
-      - MONGO_INITDB_ROOT_PASSWORD=node
-      - MONGO_INITDB_ROOT_DATABASE=admin
-      - MONGO_USERDB_ADMIN_USERNAME=node
-      - MONGO_USERDB_ADMIN_PASSWORD=node
-      - MONGO_USERDB_ADMIN_DATABASE=nodebb
+        source: ./data/certbot/conf
+        target: /etc/letsencrypt
+      - type: bind
+        source: ./data/certbot/www
+        target: /var/www/certbot
+    depends_on:
+      - nginx
+    entrypoint: "/bin/sh -c 'trap exit TERM; while :; do certbot renew; sleep 12h & wait $${!}; done;'"
+volumes:
+  mongodb_config:
+  mongodb_data:
