@@ -3,6 +3,8 @@ services:
   server:
     build:
       context: ./docker/server
+    ports:
+      - "4567:4567"
     expose:
       - "4567"
     volumes:
