@@ -76,3 +76,5 @@ Detailed upgrade instructions are listed in [Upgrading NodeBB](https://docs.node
 NodeBB is licensed under the **GNU General Public License v3 (GPL-3)** (http://www.gnu.org/copyleft/gpl.html).
 
 Interested in a sublicense agreement for use of NodeBB in a non-free/restrictive environment? Contact us at sales@nodebb.org.
+
+At the beginning, I wanted to learn this because I have some personal project but it did not work out. Instead, I learn about something about digitalocean, domain setup, hosting and docker from this project so it is a lot of fun and interesting
